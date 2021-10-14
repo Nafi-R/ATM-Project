@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="javaATM.test.AdminTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2021-09-21T09:08:08" hostname="DESKTOP-G5C44PT" time="0.005">
+  <properties/>
+  <testcase name="testGetPasscode()" classname="javaATM.test.AdminTest" time="0.001"/>
+  <testcase name="testSetID()" classname="javaATM.test.AdminTest" time="0.0"/>
+  <testcase name="testGetAdminID()" classname="javaATM.test.AdminTest" time="0.0"/>
+  <testcase name="testGetName()" classname="javaATM.test.AdminTest" time="0.001"/>
+  <testcase name="testSetName()" classname="javaATM.test.AdminTest" time="0.0"/>
+  <testcase name="testSetPass()" classname="javaATM.test.AdminTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

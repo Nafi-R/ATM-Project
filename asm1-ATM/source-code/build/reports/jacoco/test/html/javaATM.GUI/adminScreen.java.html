@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>adminScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">source-code</a> &gt; <a href="index.source.html" class="el_package">javaATM.GUI</a> &gt; <span class="el_source">adminScreen.java</span></div><h1>adminScreen.java</h1><pre class="source lang-java linenums">package javaATM.GUI;
+
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
+import javaATM.IO;
+import javafx.stage.Stage;
+import javaATM.ATM;
+import javaATM.Card;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+
+public class adminScreen {
+    Pane pane;
+    Card card;
+
+<span class="nc" id="L19">    public adminScreen(Card card) {</span>
+<span class="nc" id="L20">        pane = new Pane();</span>
+<span class="nc" id="L21">        createNodes();</span>
+<span class="nc" id="L22">        this.card = card;</span>
+<span class="nc" id="L23">    }</span>
+
+    //testing only
+<span class="nc" id="L26">    public adminScreen() {</span>
+<span class="nc" id="L27">        pane = new Pane();</span>
+<span class="nc" id="L28">        createNodes();</span>
+<span class="nc" id="L29">    }</span>
+
+    public void createNodes() {
+<span class="nc" id="L32">        Text headerText = nodeCreator.createText(&quot;ATM Maintenance&quot;);</span>
+<span class="nc" id="L33">        headerText.setStyle(&quot;-fx-font-size:20&quot;);</span>
+<span class="nc" id="L34">        headerText.setLayoutX(320);</span>
+<span class="nc" id="L35">        headerText.setLayoutY(200);</span>
+
+<span class="nc" id="L37">        TextField addText = nodeCreator.createTextField(&quot;Enter cash amount to be added..&quot;);</span>
+<span class="nc" id="L38">        addText.setLayoutX(275);</span>
+<span class="nc" id="L39">        addText.setLayoutY(300);</span>
+<span class="nc" id="L40">        addText.setPrefWidth(250);</span>
+
+<span class="nc" id="L42">        Text promptText = nodeCreator.createText(&quot;Enter below to add to ATM funds:&quot;);</span>
+<span class="nc" id="L43">        promptText.setLayoutX(310);</span>
+<span class="nc" id="L44">        promptText.setLayoutY(250);</span>
+
+<span class="nc" id="L46">        Button submit = nodeCreator.createButton(&quot;Submit&quot;);</span>
+<span class="nc" id="L47">        submit.setLayoutX(320);</span>
+<span class="nc" id="L48">        submit.setLayoutY(350);</span>
+<span class="nc" id="L49">        submit.setPrefWidth(150);</span>
+<span class="nc" id="L50">        submit.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent event) {
+<span class="nc" id="L53">                ATM.setATMFunds(ATM.getFunds()+Integer.parseInt(addText.getText()));</span>
+<span class="nc" id="L54">                pane.getChildren().add(createSuccessMessage());</span>
+<span class="nc" id="L55">                submit.getScene().setRoot(pane);</span>
+<span class="nc" id="L56">            }</span>
+        });
+
+<span class="nc" id="L59">        Button accounts = nodeCreator.createButton(&quot;View accounts&quot;);</span>
+<span class="nc" id="L60">        accounts.setLayoutX(320);</span>
+<span class="nc" id="L61">        accounts.setLayoutY(450);</span>
+<span class="nc" id="L62">        accounts.setPrefWidth(150);</span>
+<span class="nc" id="L63">        accounts.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent event) {
+<span class="nc" id="L66">               accounts.getScene().setRoot(new accountsScreen().getAccountsScreenPane());</span>
+<span class="nc" id="L67">            }</span>
+        });
+
+<span class="nc" id="L70">        Button transactions = nodeCreator.createButton(&quot;View transactions&quot;);</span>
+<span class="nc" id="L71">        transactions.setLayoutX(320);</span>
+<span class="nc" id="L72">        transactions.setLayoutY(500);</span>
+<span class="nc" id="L73">        transactions.setPrefWidth(150);</span>
+<span class="nc" id="L74">        transactions.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent event) {
+<span class="nc" id="L77">                transactions.getScene().setRoot(new transactionsScreen().getTransactionsScreen());</span>
+<span class="nc" id="L78">            }</span>
+        });
+
+        //back button
+<span class="nc" id="L82">        Button closeButton = nodeCreator.createButton(&quot;Close&quot;);</span>
+<span class="nc" id="L83">        closeButton.setLayoutX(370);</span>
+<span class="nc" id="L84">        closeButton.setLayoutY(700);</span>
+<span class="nc" id="L85">        closeButton.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent event) {
+<span class="nc" id="L88">                Stage stage = (Stage) closeButton.getScene().getWindow();</span>
+<span class="nc" id="L89">                new IO().save();</span>
+<span class="nc" id="L90">                stage.close();</span>
+<span class="nc" id="L91">            }</span>
+        });
+
+<span class="nc" id="L94">        pane.getChildren().addAll(headerText, promptText, addText, submit, closeButton, accounts, transactions);</span>
+<span class="nc" id="L95">    }</span>
+
+    public Text createSuccessMessage() {
+<span class="nc" id="L98">        Text text = nodeCreator.createText(&quot;ATM funds have been successfully added. ATM funds now total to $&quot;+ATM.getFunds());</span>
+<span class="nc" id="L99">        text.setLayoutX(200);</span>
+<span class="nc" id="L100">        text.setLayoutY(500);</span>
+<span class="nc" id="L101">        text.setStyle(&quot;-fx-font-size: 12&quot;);</span>
+<span class="nc" id="L102">        text.setFill(Paint.valueOf(&quot;RED&quot;));</span>
+<span class="nc" id="L103">        return text;</span>
+    }
+
+    public Pane getAdminScreen() {
+<span class="nc" id="L107">        return pane;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

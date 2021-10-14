@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>accountsScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">source-code</a> &gt; <a href="index.source.html" class="el_package">javaATM.GUI</a> &gt; <span class="el_source">accountsScreen.java</span></div><h1>accountsScreen.java</h1><pre class="source lang-java linenums">package javaATM.GUI;
+
+import javaATM.Account;
+import javaATM.ATM;
+import javaATM.Transaction;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Paint;
+import javafx.stage.Stage;
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+public class accountsScreen {
+<span class="nc" id="L25">    static Pane pane = new Pane();</span>
+<span class="nc" id="L26">    static TableView&lt;Account&gt; table = new TableView&lt;&gt;();</span>
+<span class="nc" id="L27">    static Account selectedAccount = null;</span>
+
+<span class="nc" id="L29">    accountsScreen() {</span>
+<span class="nc" id="L30">        createNodes();</span>
+<span class="nc" id="L31">    }</span>
+
+    //public static void show(){
+    //    Stage stage = new Stage();
+    //    createNodes();
+    //    Scene scene = new Scene(pane, 700, 475);
+    //    stage.setTitle(&quot;Accounts&quot;);
+    //    stage.setScene(scene);
+    //    stage.setResizable(false);
+    //    stage.show();
+    //}
+
+    public Pane getAccountsScreenPane() {
+<span class="nc" id="L44">        return pane;</span>
+    }
+
+    private static  void createNodes(){
+<span class="nc" id="L48">        table = new TableView&lt;&gt;();</span>
+<span class="nc" id="L49">        table.setMaxWidth(700);</span>
+<span class="nc" id="L50">        List&lt;TableColumn&lt;Account, ?&gt;&gt; columns = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L51">        TableColumn&lt;Account, Integer&gt; accNumColumn = new TableColumn&lt;&gt;(&quot;Account Number&quot;);</span>
+<span class="nc" id="L52">        accNumColumn.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;accountNumber&quot;));</span>
+<span class="nc" id="L53">        accNumColumn.setMinWidth(300);</span>
+<span class="nc" id="L54">        columns.add(accNumColumn);</span>
+
+<span class="nc" id="L56">        TableColumn&lt;Account, String&gt; accBalanceColumn = new TableColumn&lt;&gt;(&quot;Balance&quot;);</span>
+<span class="nc" id="L57">        accBalanceColumn.setMinWidth(400);</span>
+<span class="nc" id="L58">        DecimalFormatSymbols currencySymbol = new DecimalFormatSymbols(Locale.ENGLISH);</span>
+<span class="nc" id="L59">        currencySymbol.setDecimalSeparator('.');</span>
+<span class="nc" id="L60">        currencySymbol.setGroupingSeparator(',');</span>
+
+<span class="nc" id="L62">        DecimalFormat currency = new DecimalFormat(&quot;$###,##0.00&quot;,currencySymbol);</span>
+<span class="nc" id="L63">        currency.setGroupingSize(3);</span>
+<span class="nc" id="L64">        currency.setDecimalSeparatorAlwaysShown(true);</span>
+
+<span class="nc" id="L66">        accBalanceColumn.setCellValueFactory(account -&gt; {</span>
+<span class="nc" id="L67">            String formattedCost = currency.format(account.getValue().getBalance());</span>
+<span class="nc" id="L68">            return new SimpleStringProperty(formattedCost);</span>
+        });
+<span class="nc" id="L70">        columns.add(accBalanceColumn);</span>
+
+<span class="nc" id="L72">        table.setItems(getAccountsList());</span>
+<span class="nc" id="L73">        table.getColumns().addAll(columns);</span>
+
+<span class="nc" id="L75">        Button rmBtn = nodeCreator.createButton(&quot;Remove Account&quot;);</span>
+<span class="nc" id="L76">        rmBtn.setLayoutX(100);</span>
+<span class="nc" id="L77">        rmBtn.setLayoutY(425);</span>
+<span class="nc" id="L78">        rmBtn.setOnMouseClicked(event -&gt; {</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">                if(selectedAccount == null){</span>
+<span class="nc" id="L80">                    System.out.println(&quot;No account selected!&quot;);</span>
+                }
+                else {
+<span class="nc" id="L83">                    ATM.removeAccount(selectedAccount);</span>
+<span class="nc" id="L84">                    table.setItems(getAccountsList());</span>
+<span class="nc" id="L85">                    table.refresh();</span>
+                }
+
+<span class="nc" id="L88">        });</span>
+<span class="nc" id="L89">        rmBtn.setDisable(true);</span>
+
+<span class="nc" id="L91">        Button transBtn = nodeCreator.createButton(&quot;View Transactions&quot;);</span>
+<span class="nc" id="L92">        transBtn.setLayoutX(275);</span>
+<span class="nc" id="L93">        transBtn.setLayoutY(425);</span>
+<span class="nc" id="L94">        transBtn.setOnMouseClicked(event -&gt; {</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">            if(selectedAccount == null){</span>
+<span class="nc" id="L96">                System.out.println(&quot;No account selected!&quot;);</span>
+            }
+            else {
+<span class="nc" id="L99">                accountTransactionScreen.show(selectedAccount);</span>
+            }
+
+<span class="nc" id="L102">        });</span>
+<span class="nc" id="L103">        transBtn.setDisable(true);</span>
+
+<span class="nc" id="L105">        Button addBtn = nodeCreator.createButton(&quot;Create New Account&quot;);</span>
+<span class="nc" id="L106">        addBtn.setLayoutX(450);</span>
+<span class="nc" id="L107">        addBtn.setLayoutY(425);</span>
+<span class="nc" id="L108">        addBtn.setOnMouseClicked(event -&gt; {</span>
+<span class="nc" id="L109">                Account acc = new Account();</span>
+<span class="nc" id="L110">                ATM.addAccount(acc);</span>
+<span class="nc" id="L111">                table.setItems(getAccountsList());</span>
+<span class="nc" id="L112">                popUpScreen.show(&quot;New account '&quot; + acc.getAccountNumber()  +&quot;' added!&quot;, &quot;Account Created&quot;, Paint.valueOf(&quot;Green&quot;));</span>
+<span class="nc" id="L113">                table.refresh();</span>
+<span class="nc" id="L114">        });</span>
+
+<span class="nc" id="L116">        table.setOnMouseClicked(event -&gt; {</span>
+<span class="nc" id="L117">            selectedAccount = table.getSelectionModel().getSelectedItem();</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">            if (selectedAccount != null) {</span>
+<span class="nc" id="L119">                rmBtn.setDisable(false);</span>
+<span class="nc" id="L120">                transBtn.setDisable(false);</span>
+            }
+<span class="nc" id="L122">        });</span>
+<span class="nc" id="L123">        Button goBack = nodeCreator.createButton(&quot;Go Back&quot;);</span>
+<span class="nc" id="L124">        goBack.setLayoutX(450);</span>
+<span class="nc" id="L125">        goBack.setLayoutY(525);</span>
+<span class="nc" id="L126">        goBack.setOnMouseClicked(event -&gt; {</span>
+<span class="nc" id="L127">            goBack.getScene().setRoot(new adminScreen().getAdminScreen());</span>
+<span class="nc" id="L128">        });</span>
+<span class="nc" id="L129">        pane.getChildren().addAll(rmBtn, addBtn, transBtn, goBack);</span>
+<span class="nc" id="L130">        pane.getChildren().add(table);</span>
+
+
+<span class="nc" id="L133">    }</span>
+
+
+    private static ObservableList&lt;Account&gt; getAccountsList () {
+<span class="nc" id="L137">        ObservableList&lt;Account&gt; outputList = FXCollections.observableArrayList();</span>
+<span class="nc" id="L138">        outputList.addAll(ATM.getAccounts());</span>
+<span class="nc" id="L139">        return outputList;</span>
+    }
+
+    private static class accountTransactionScreen{
+<span class="nc" id="L143">        static Pane pane = new Pane();</span>
+<span class="nc" id="L144">        static TableView&lt;Transaction&gt; table = new TableView&lt;&gt;();</span>
+<span class="nc" id="L145">        static Stage stage = new Stage();</span>
+<span class="nc" id="L146">        static Scene scene = new Scene(pane, 700, 475);</span>
+
+        static void show(Account account)
+        {
+<span class="nc" id="L150">            createNodes(account);</span>
+<span class="nc" id="L151">            stage.setTitle(&quot;Transactions for Account: &quot; + account.getAccountNumber());</span>
+<span class="nc" id="L152">            stage.setScene(scene);</span>
+<span class="nc" id="L153">            stage.setResizable(false);</span>
+<span class="nc" id="L154">            stage.show();</span>
+<span class="nc" id="L155">        }</span>
+
+        private static  void createNodes(Account account){
+<span class="nc" id="L158">            table = new TableView&lt;&gt;();</span>
+<span class="nc" id="L159">            table.setMinWidth(700);</span>
+<span class="nc" id="L160">            List&lt;TableColumn&lt;Transaction, ?&gt;&gt; columns = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L161">            TableColumn&lt;Transaction, Integer&gt; transactNumColumn = new TableColumn&lt;&gt;(&quot;Transaction Number&quot;);</span>
+<span class="nc" id="L162">            transactNumColumn.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;transactNumber&quot;));</span>
+<span class="nc" id="L163">            transactNumColumn.setMinWidth(200);</span>
+<span class="nc" id="L164">            columns.add(transactNumColumn);</span>
+
+<span class="nc" id="L166">            TableColumn&lt;Transaction, Double&gt; transactAmountColumn = new TableColumn&lt;&gt;(&quot;Transaction Amount&quot;);</span>
+<span class="nc" id="L167">            transactAmountColumn.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;transactAmt&quot;));</span>
+<span class="nc" id="L168">            transactAmountColumn.setMinWidth(300);</span>
+<span class="nc" id="L169">            columns.add(transactAmountColumn);</span>
+
+<span class="nc" id="L171">            TableColumn&lt;Transaction, Integer&gt; transactTypeColumn = new TableColumn&lt;&gt;(&quot;Transaction Type&quot;);</span>
+<span class="nc" id="L172">            transactTypeColumn.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;transactAmt&quot;));</span>
+<span class="nc" id="L173">            transactTypeColumn.setMinWidth(200);</span>
+<span class="nc" id="L174">            columns.add(transactTypeColumn);</span>
+
+<span class="nc" id="L176">            table.setItems(getTransactions(account));</span>
+<span class="nc" id="L177">            table.getColumns().addAll(columns);</span>
+
+<span class="nc" id="L179">            Button closeButton = nodeCreator.createButton(&quot;Close&quot;);</span>
+<span class="nc" id="L180">            closeButton.setLayoutX(325);</span>
+<span class="nc" id="L181">            closeButton.setLayoutY(425);</span>
+<span class="nc" id="L182">            closeButton.setOnMouseClicked(event -&gt; stage.close());</span>
+
+<span class="nc" id="L184">            pane.getChildren().add(closeButton);</span>
+<span class="nc" id="L185">            pane.getChildren().add(table);</span>
+<span class="nc" id="L186">        }</span>
+
+        private static ObservableList&lt;Transaction&gt; getTransactions(Account account){
+<span class="nc" id="L189">            ObservableList&lt;Transaction&gt; output = FXCollections.observableArrayList();</span>
+<span class="nc" id="L190">            output.addAll(account.getInvoices());</span>
+<span class="nc" id="L191">            return output;</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

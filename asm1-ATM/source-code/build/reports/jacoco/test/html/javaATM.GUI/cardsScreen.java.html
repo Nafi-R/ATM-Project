@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>cardsScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">source-code</a> &gt; <a href="index.source.html" class="el_package">javaATM.GUI</a> &gt; <span class="el_source">cardsScreen.java</span></div><h1>cardsScreen.java</h1><pre class="source lang-java linenums">package javaATM.GUI;
+
+import javaATM.ATM;
+import javaATM.Account;
+import javaATM.Card;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.ArrayList;
+import java.util.List;
+
+<span class="nc" id="L26">public class cardsScreen {</span>
+<span class="nc" id="L27">    static Pane pane = new Pane();</span>
+<span class="nc" id="L28">    static TableView&lt;Card&gt; table = new TableView&lt;&gt;();</span>
+    static Scene scene;
+<span class="nc" id="L30">    static Card selectedCard = null;</span>
+
+    public static void show()
+    {
+<span class="nc" id="L34">        Stage stage = new Stage();</span>
+<span class="nc" id="L35">        scene = new Scene(pane, 700, 475);</span>
+<span class="nc" id="L36">        stage.setTitle(&quot;Cards&quot;);</span>
+<span class="nc" id="L37">        stage.setScene(scene);</span>
+<span class="nc" id="L38">        createNodes();</span>
+<span class="nc" id="L39">        stage.setResizable(false);</span>
+<span class="nc" id="L40">        stage.show();</span>
+<span class="nc" id="L41">    }</span>
+
+    private static void createNodes(){
+<span class="nc" id="L44">        table = new TableView&lt;&gt;();</span>
+<span class="nc" id="L45">        table.setMaxWidth(700);</span>
+<span class="nc" id="L46">        List&lt;Node&gt; nodes = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L47">        List&lt;TableColumn&lt;Card,?&gt;&gt; columns = new ArrayList&lt;&gt;();</span>
+
+<span class="nc" id="L49">        TableColumn&lt;Card, Integer&gt; carNumColumn = new TableColumn&lt;&gt;(&quot;Card Number&quot;);</span>
+<span class="nc" id="L50">        carNumColumn.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;cardNumber&quot;));</span>
+<span class="nc" id="L51">        carNumColumn.setMinWidth(200);</span>
+<span class="nc" id="L52">        columns.add(carNumColumn);</span>
+
+<span class="nc" id="L54">        TableColumn&lt;Card, String&gt; accNumColumn = new TableColumn&lt;&gt;(&quot;Account Number&quot;);</span>
+<span class="nc" id="L55">        accNumColumn.setCellValueFactory(val -&gt; new SimpleStringProperty(Integer.toString(val.getValue().getAccount().getAccountNumber())));</span>
+<span class="nc" id="L56">        accNumColumn.setMinWidth(200);</span>
+<span class="nc" id="L57">        columns.add(accNumColumn);</span>
+
+<span class="nc" id="L59">        TableColumn&lt;Card, String&gt; cardStatusColumn = new TableColumn&lt;&gt;(&quot;Card Status&quot;);</span>
+<span class="nc" id="L60">        cardStatusColumn.setCellValueFactory(val -&gt; new SimpleStringProperty(val.getValue().getStatus()));</span>
+<span class="nc" id="L61">        cardStatusColumn.setMinWidth(100);</span>
+<span class="nc" id="L62">        columns.add(cardStatusColumn);</span>
+
+<span class="nc" id="L64">        TableColumn&lt;Card, String&gt; cardStartDateColumn = new TableColumn&lt;&gt;(&quot;Start Date&quot;);</span>
+<span class="nc" id="L65">        cardStartDateColumn.setCellValueFactory(val -&gt; new SimpleStringProperty(val.getValue().getStartDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT))));</span>
+<span class="nc" id="L66">        cardStartDateColumn.setMinWidth(100);</span>
+<span class="nc" id="L67">        columns.add(cardStartDateColumn);</span>
+
+<span class="nc" id="L69">        TableColumn&lt;Card, String&gt; cardEndDateColumn = new TableColumn&lt;&gt;(&quot;Expiry Date&quot;);</span>
+<span class="nc" id="L70">        cardEndDateColumn.setCellValueFactory(val -&gt; new SimpleStringProperty(val.getValue().getExpiryDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT))));</span>
+<span class="nc" id="L71">        cardEndDateColumn.setMinWidth(100);</span>
+<span class="nc" id="L72">        columns.add(cardEndDateColumn);</span>
+
+
+<span class="nc" id="L75">        table.setItems(getCardsList());</span>
+<span class="nc" id="L76">        table.getColumns().addAll(columns);</span>
+
+
+<span class="nc" id="L79">        Button updateBtn = nodeCreator.createButton(&quot;Refresh Cards&quot;);</span>
+<span class="nc" id="L80">        updateBtn.setLayoutX(50);</span>
+<span class="nc" id="L81">        updateBtn.setLayoutY(425);</span>
+<span class="nc" id="L82">        updateBtn.setOnMouseClicked(event -&gt; {</span>
+<span class="nc" id="L83">                ObservableList&lt;Card&gt; cards = getCardsList();</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">                for(Card c : cards)</span>
+<span class="nc" id="L85">                    c.updateStatus();</span>
+<span class="nc" id="L86">                table.setItems(cards);</span>
+<span class="nc" id="L87">                table.refresh();</span>
+<span class="nc" id="L88">        });</span>
+<span class="nc" id="L89">        nodes.add(updateBtn);</span>
+
+<span class="nc" id="L91">        Button createBtn = nodeCreator.createButton(&quot;Create New Card&quot;);</span>
+<span class="nc" id="L92">        createBtn.setLayoutX(150);</span>
+<span class="nc" id="L93">        createBtn.setLayoutY(425);</span>
+<span class="nc" id="L94">        createBtn.setOnMouseClicked(event -&gt; addCardScreen.show());</span>
+<span class="nc" id="L95">        nodes.add(createBtn);</span>
+
+<span class="nc" id="L97">        Button lostBtn = nodeCreator.createButton(&quot;Set to Lost&quot;);</span>
+<span class="nc" id="L98">        lostBtn.setLayoutX(475);</span>
+<span class="nc" id="L99">        lostBtn.setLayoutY(425);</span>
+<span class="nc" id="L100">        lostBtn.setOnMouseClicked(event -&gt; {</span>
+<span class="nc" id="L101">            selectedCard.setStatus(&quot;Lost&quot;);</span>
+<span class="nc" id="L102">            table.setItems(getCardsList());</span>
+<span class="nc" id="L103">            table.refresh();</span>
+<span class="nc" id="L104">        });</span>
+<span class="nc" id="L105">        lostBtn.setDisable(true);</span>
+<span class="nc" id="L106">        nodes.add(lostBtn);</span>
+
+<span class="nc" id="L108">        Button stolenBtn = nodeCreator.createButton(&quot;Set to Stolen&quot;);</span>
+<span class="nc" id="L109">        stolenBtn.setLayoutX(550);</span>
+<span class="nc" id="L110">        stolenBtn.setLayoutY(425);</span>
+<span class="nc" id="L111">        stolenBtn.setOnMouseClicked(event -&gt; {</span>
+<span class="nc" id="L112">            selectedCard.setStatus(&quot;Stolen&quot;);</span>
+<span class="nc" id="L113">            table.setItems(getCardsList());</span>
+<span class="nc" id="L114">            table.refresh();</span>
+<span class="nc" id="L115">        });</span>
+<span class="nc" id="L116">        stolenBtn.setDisable(true);</span>
+<span class="nc" id="L117">        nodes.add(stolenBtn);</span>
+
+<span class="nc" id="L119">        table.setOnMouseClicked(event -&gt; {</span>
+<span class="nc" id="L120">            selectedCard = table.getSelectionModel().getSelectedItem();</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">            if (selectedCard != null) {</span>
+<span class="nc" id="L122">                stolenBtn.setDisable(false);</span>
+<span class="nc" id="L123">                lostBtn.setDisable(false);</span>
+            }
+<span class="nc" id="L125">        });</span>
+
+<span class="nc" id="L127">        pane.getChildren().addAll(nodes);</span>
+<span class="nc" id="L128">        pane.getChildren().add(table);</span>
+<span class="nc" id="L129">    }</span>
+
+
+    private static ObservableList&lt;Card&gt; getCardsList () {
+<span class="nc" id="L133">        ObservableList&lt;Card&gt; outputList = FXCollections.observableArrayList();</span>
+<span class="nc" id="L134">        outputList.addAll(ATM.getCards());</span>
+<span class="nc" id="L135">        return outputList;</span>
+    }
+
+    private static class addCardScreen{
+        static Pane addCardPane;
+<span class="nc" id="L140">        static TableView&lt;Account&gt; cardTable = new TableView&lt;&gt;();</span>
+<span class="nc" id="L141">        static Stage cardStage = new Stage();</span>
+<span class="nc" id="L142">        private static Account selectedAccount = null;</span>
+        static Scene scene;
+
+        static void show()
+        {
+<span class="nc" id="L147">            updateTable();</span>
+<span class="nc" id="L148">            cardStage.setTitle(&quot;Create New Card&quot;);</span>
+<span class="nc" id="L149">            cardStage.setScene(scene);</span>
+<span class="nc" id="L150">            cardStage.setResizable(false);</span>
+<span class="nc" id="L151">            cardStage.setAlwaysOnTop(true);</span>
+<span class="nc" id="L152">;           cardStage.show();</span>
+<span class="nc" id="L153">        }</span>
+
+
+        private static void updateTable(){
+<span class="nc" id="L157">            addCardPane = new Pane();</span>
+<span class="nc" id="L158">            scene = new Scene(addCardPane, 600, 250);</span>
+<span class="nc" id="L159">            cardTable = new TableView&lt;&gt;();</span>
+<span class="nc" id="L160">            cardTable.setMaxWidth(300);</span>
+<span class="nc" id="L161">            cardTable.setMaxHeight(200);</span>
+<span class="nc" id="L162">            cardTable.setLayoutY(50);</span>
+<span class="nc" id="L163">            List&lt;Node&gt; nodes = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L164">            TableColumn&lt;Account, Integer&gt; accNumColumn = new TableColumn&lt;&gt;(&quot;Account Number&quot;);</span>
+<span class="nc" id="L165">            accNumColumn.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;accountNumber&quot;));</span>
+<span class="nc" id="L166">            accNumColumn.setMinWidth(300);</span>
+
+<span class="nc" id="L168">            cardTable.setItems(getAccountsList());</span>
+<span class="nc" id="L169">            cardTable.getColumns().add(accNumColumn);</span>
+<span class="nc" id="L170">            nodes.add(cardTable);</span>
+
+<span class="nc" id="L172">            Button createBtn = nodeCreator.createButton(&quot;Create Card&quot;);</span>
+<span class="nc" id="L173">            createBtn.setLayoutX(375);</span>
+<span class="nc" id="L174">            createBtn.setLayoutY(150);</span>
+
+<span class="nc" id="L176">            createBtn.setDisable(true);</span>
+<span class="nc" id="L177">            nodes.add(createBtn);</span>
+
+<span class="nc" id="L179">            Button cancelBtn = nodeCreator.createButton(&quot;Cancel&quot;);</span>
+<span class="nc" id="L180">            cancelBtn.setLayoutX(475);</span>
+<span class="nc" id="L181">            cancelBtn.setLayoutY(150);</span>
+<span class="nc" id="L182">            cancelBtn.setOnMouseClicked(event -&gt; cardStage.close());</span>
+<span class="nc" id="L183">            nodes.add(cancelBtn);</span>
+
+<span class="nc" id="L185">            cardTable.setOnMouseClicked(event -&gt; {</span>
+<span class="nc" id="L186">                selectedAccount = addCardScreen.cardTable.getSelectionModel().getSelectedItem();</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">                if (selectedAccount != null)</span>
+<span class="nc" id="L188">                    createBtn.setDisable(false);</span>
+<span class="nc" id="L189">            });</span>
+
+<span class="nc" id="L191">            Text selectAsk = nodeCreator.createText(&quot;Select an account to link to this card:&quot;);</span>
+<span class="nc" id="L192">            selectAsk.setLayoutX(30);</span>
+<span class="nc" id="L193">            selectAsk.setLayoutY(25);</span>
+<span class="nc" id="L194">            nodes.add(selectAsk);</span>
+
+
+<span class="nc" id="L197">            Text pinAsk = nodeCreator.createText(&quot;Enter a 5 digit PIN number:&quot;);</span>
+<span class="nc" id="L198">            pinAsk.setLayoutX(375);</span>
+<span class="nc" id="L199">            pinAsk.setLayoutY(25);</span>
+<span class="nc" id="L200">            nodes.add(pinAsk);</span>
+
+<span class="nc" id="L202">            Text invalidTxt = nodeCreator.createText(&quot;Invalid PIN Number&quot;);</span>
+<span class="nc" id="L203">            invalidTxt.setLayoutX(390);</span>
+<span class="nc" id="L204">            invalidTxt.setLayoutY(60);</span>
+<span class="nc" id="L205">            invalidTxt.setFill(Paint.valueOf(&quot;RED&quot;));</span>
+<span class="nc" id="L206">            invalidTxt.setVisible(false);</span>
+<span class="nc" id="L207">            nodes.add(invalidTxt);</span>
+
+<span class="nc" id="L209">            TextField pinInput = nodeCreator.createTextField(&quot;PIN number&quot;);</span>
+<span class="nc" id="L210">            pinInput.setLayoutX(375);</span>
+<span class="nc" id="L211">            pinInput.setLayoutY(75);</span>
+<span class="nc" id="L212">            nodes.add(pinInput);</span>
+
+<span class="nc" id="L214">            createBtn.setOnMouseClicked(event -&gt; {</span>
+<span class="nc" id="L215">                String input = pinInput.getCharacters().toString();</span>
+<span class="nc" id="L216">                int pinNum = 0;</span>
+                try{
+<span class="nc" id="L218">                     pinNum = Integer.parseInt(input);</span>
+<span class="nc bnc" id="L219" title="All 4 branches missed.">                    if(pinNum &gt; 99999 || pinNum &lt; 10000){</span>
+<span class="nc" id="L220">                        invalidTxt.setVisible(true);</span>
+                    }
+                    else{
+<span class="nc" id="L223">                        Card c = new Card(pinNum, selectedAccount);</span>
+<span class="nc" id="L224">                        ATM.addCard(c);</span>
+<span class="nc" id="L225">                        cardsScreen.table.setItems(getCardsList());</span>
+<span class="nc" id="L226">                        cardsScreen.table.refresh();</span>
+<span class="nc" id="L227">                        popUpScreen.show(&quot;New Card  '&quot; + c.getCardNumber()  + &quot;' added to account '&quot;+selectedAccount.getAccountNumber()+&quot;'&quot; , &quot;Card Added&quot;, Paint.valueOf(&quot;Green&quot;));</span>
+<span class="nc" id="L228">                        cardStage.close();</span>
+                    }
+                }
+<span class="nc" id="L231">                catch(NumberFormatException nfe)</span>
+                {
+<span class="nc" id="L233">                    invalidTxt.setVisible(true);</span>
+<span class="nc" id="L234">                }</span>
+<span class="nc" id="L235">            });</span>
+
+<span class="nc" id="L237">            addCardPane.getChildren().addAll(nodes);</span>
+<span class="nc" id="L238">        }</span>
+
+        private static ObservableList&lt;Account&gt; getAccountsList() {
+<span class="nc" id="L241">            ObservableList&lt;Account&gt; output = FXCollections.observableArrayList();</span>
+<span class="nc" id="L242">            output.addAll(ATM.getAccounts());</span>
+<span class="nc" id="L243">            return output;</span>
+        }
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

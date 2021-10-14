@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>depositScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">source-code</a> &gt; <a href="index.source.html" class="el_package">javaATM.GUI</a> &gt; <span class="el_source">depositScreen.java</span></div><h1>depositScreen.java</h1><pre class="source lang-java linenums">package javaATM.GUI;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
+
+import javafx.scene.input.MouseEvent;
+import java.util.ArrayList;
+
+import javaATM.Card;
+import javaATM.Transaction;
+
+public class depositScreen {
+    Pane pane;
+<span class="nc" id="L18">    private ArrayList&lt;Integer&gt; deposits = new ArrayList&lt;&gt;();</span>
+    Transaction transaction;
+    Card card;
+
+    //handle deposit
+<span class="nc" id="L23">    public depositScreen(Card card) {</span>
+<span class="nc" id="L24">        pane = new Pane();</span>
+<span class="nc" id="L25">        this.card = card;</span>
+<span class="nc" id="L26">        createNodes();</span>
+<span class="nc" id="L27">    }</span>
+
+    //handle add
+    public void addAmount(Text amountText) {
+<span class="nc" id="L31">        int total = 0;</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">        for(int i =0; i &lt; deposits.size(); i++) {</span>
+<span class="nc" id="L33">            total+=deposits.get(i);</span>
+        }
+<span class="nc" id="L35">        amountText.setText(Integer.toString(total));</span>
+<span class="nc" id="L36">    }</span>
+
+    public ArrayList&lt;Integer&gt; getDeposit() {
+<span class="nc" id="L39">        return deposits;</span>
+    }
+
+    //handle undo
+    public void undoAmount(Text amountText) {
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if(deposits.size() &gt; 0) {</span>
+<span class="nc" id="L45">            deposits.remove(deposits.size() - 1);</span>
+<span class="nc" id="L46">            addAmount(amountText);</span>
+        }
+<span class="nc" id="L48">    }</span>
+
+    public void resetAmount(Text amountText) {
+<span class="nc" id="L51">        deposits.clear();</span>
+<span class="nc" id="L52">        addAmount(amountText);</span>
+<span class="nc" id="L53">    }</span>
+
+    public void createEffect(Button button) {
+<span class="nc" id="L56">        DropShadow shadow = new DropShadow();</span>
+<span class="nc" id="L57">        button.addEventHandler(MouseEvent.MOUSE_ENTERED,</span>
+<span class="nc" id="L58">                new EventHandler&lt;MouseEvent&gt;() {</span>
+                    @Override
+                    public void handle(MouseEvent e) {
+<span class="nc" id="L61">                        button.setEffect(shadow);</span>
+<span class="nc" id="L62">                    }</span>
+                });
+<span class="nc" id="L64">        button.addEventHandler(MouseEvent.MOUSE_EXITED,</span>
+<span class="nc" id="L65">                new EventHandler&lt;MouseEvent&gt;() {</span>
+                    @Override
+                    public void handle(MouseEvent e) {
+<span class="nc" id="L68">                        button.setEffect(null);</span>
+<span class="nc" id="L69">                    }</span>
+                });
+<span class="nc" id="L71">    }</span>
+    public void createNodes() {
+
+
+        //initializing deposit
+<span class="nc" id="L76">        Text welcomeText = nodeCreator.createText(&quot;Deposit&quot;);</span>
+<span class="nc" id="L77">        welcomeText.setStyle(&quot;-fx-font-size: 18&quot;);</span>
+<span class="nc" id="L78">        welcomeText.setLayoutX(385);</span>
+<span class="nc" id="L79">        welcomeText.setLayoutY(200);</span>
+
+        //Initializing the buttons
+<span class="nc" id="L82">        String[] amt = {&quot;100&quot;, &quot;50&quot;, &quot;10&quot;, &quot;5&quot;};</span>
+<span class="nc" id="L83">        int[] sizesX = {315, 430, 315, 430};</span>
+<span class="nc" id="L84">        int[] sizesY = {375, 375, 425, 425};</span>
+<span class="nc" id="L85">        ArrayList&lt;Button&gt; buttons = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        for(int i = 0; i &lt; amt.length; i++) {</span>
+<span class="nc" id="L87">            buttons.add(nodeCreator.createButton(amt[i]));</span>
+<span class="nc" id="L88">            buttons.get(i).setLayoutX(sizesX[i]);</span>
+<span class="nc" id="L89">            buttons.get(i).setLayoutY(sizesY[i]);</span>
+        }
+
+        //Header to deposited value
+<span class="nc" id="L93">        Text amountTitle = nodeCreator.createText(&quot;Choose amount to increment deposit value&quot;);</span>
+<span class="nc" id="L94">        amountTitle.setStyle(&quot;-fx-font-size: 18&quot;);</span>
+<span class="nc" id="L95">        amountTitle.setLayoutX(260);</span>
+<span class="nc" id="L96">        amountTitle.setLayoutY(300);</span>
+<span class="nc" id="L97">        Text amountText = nodeCreator.createText(Integer.toString(0));</span>
+<span class="nc" id="L98">        amountText.setLayoutX(260);</span>
+<span class="nc" id="L99">        amountText.setLayoutY(500);</span>
+
+        //Added onclick to buttons
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        for(int i = 0; i &lt; amt.length; i++) {</span>
+<span class="nc" id="L103">            int amount = Integer.parseInt(amt[i]);</span>
+<span class="nc" id="L104">            Button curr_button = buttons.get(i);</span>
+<span class="nc" id="L105">            curr_button.setPrefSize(100, 40);</span>
+<span class="nc" id="L106">            curr_button.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+                @Override
+                public void handle(ActionEvent event) {
+<span class="nc" id="L109">                    deposits.add(amount);</span>
+                    //amountText.setText(Integer.toString(depositedAmount));
+<span class="nc" id="L111">                    addAmount(amountText);</span>
+<span class="nc" id="L112">                }</span>
+            });
+        }
+
+        //Undo button
+<span class="nc" id="L117">        Button undo = nodeCreator.createButton(&quot;Undo&quot;);</span>
+<span class="nc" id="L118">        undo.setLayoutX(370);</span>
+<span class="nc" id="L119">        undo.setLayoutY(480);</span>
+<span class="nc" id="L120">        undo.setStyle(&quot;-fx-background-color: yellow;&quot;);</span>
+<span class="nc" id="L121">        undo.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent event) {
+<span class="nc" id="L124">                undoAmount(amountText);</span>
+<span class="nc" id="L125">            }</span>
+        });
+
+        //shadow effect for undo
+<span class="nc" id="L129">        createEffect(undo);</span>
+
+        //Reset button
+<span class="nc" id="L132">        Button reset = nodeCreator.createButton(&quot;Reset&quot;);</span>
+<span class="nc" id="L133">        reset.setLayoutX(430);</span>
+<span class="nc" id="L134">        reset.setLayoutY(480);</span>
+<span class="nc" id="L135">        reset.setStyle(&quot;-fx-text-fill: white; -fx-background-color: red&quot;);</span>
+<span class="nc" id="L136">        reset.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent event) {
+<span class="nc" id="L139">                resetAmount(amountText);</span>
+<span class="nc" id="L140">            }</span>
+        });
+
+<span class="nc" id="L143">        createEffect(reset);</span>
+        //done button
+<span class="nc" id="L145">        Button done = nodeCreator.createButton(&quot;Done&quot;);</span>
+<span class="nc" id="L146">        done.setLayoutX(370);</span>
+<span class="nc" id="L147">        done.setLayoutY(510);</span>
+<span class="nc" id="L148">        done.setPrefWidth(106);</span>
+<span class="nc" id="L149">        done.setStyle(&quot;-fx-background-color: green; -fx-text-fill: white&quot;);</span>
+<span class="nc" id="L150">        done.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent event) {
+<span class="nc" id="L153">                processDeposit(Integer.parseInt(amountText.getText()));</span>
+<span class="nc" id="L154">                Transaction transaction = addTransaction(Integer.parseInt(amountText.getText()), &quot;Deposit&quot;);</span>
+<span class="nc" id="L155">                done.getScene().setRoot(new receiptScreen(transaction).getReceiptScreen());            }</span>
+        });
+
+<span class="nc" id="L158">        createEffect(done);</span>
+
+<span class="nc" id="L160">        Button backButton = nodeCreator.createButton(&quot;Go back&quot;);</span>
+<span class="nc" id="L161">        backButton.setPrefSize(100, 30);</span>
+<span class="nc" id="L162">        backButton.setLayoutX(370);</span>
+<span class="nc" id="L163">        backButton.setLayoutY(650);</span>
+<span class="nc" id="L164">        backButton.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent event) {
+<span class="nc" id="L167">                backButton.getScene().setRoot(new optionScreen(card).getOptionScreen());</span>
+<span class="nc" id="L168">            }</span>
+        });
+
+        //Add to pane
+<span class="nc" id="L172">        pane.getChildren().addAll(welcomeText, amountTitle, amountText, undo, reset, done, backButton);</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">        for(int i = 0; i &lt; buttons.size(); i++) {</span>
+<span class="nc" id="L174">            pane.getChildren().add(buttons.get(i));</span>
+        }
+<span class="nc" id="L176">    }</span>
+
+    public Pane getDepositScreen() {
+<span class="nc" id="L179">        return pane;</span>
+    }
+
+    public Transaction addTransaction(int amount, String type) {
+<span class="nc" id="L183">        Transaction transaction = new Transaction(card.getAccount(), type, card.getAccount().getInvoices().size()+1, amount);</span>
+<span class="nc" id="L184">        card.getAccount().addTransaction(transaction);</span>
+<span class="nc" id="L185">        return transaction;</span>
+    }
+
+    public void processDeposit(int amount) {
+<span class="nc" id="L189">        card.getAccount().addMoney(amount);</span>
+<span class="nc" id="L190">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

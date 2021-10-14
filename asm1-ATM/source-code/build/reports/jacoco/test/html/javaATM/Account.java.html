@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Account.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">source-code</a> &gt; <a href="index.source.html" class="el_package">javaATM</a> &gt; <span class="el_source">Account.java</span></div><h1>Account.java</h1><pre class="source lang-java linenums">package javaATM;
+// package javaATM;
+
+import java.util.ArrayList;
+
+/**
+* Abstraction of the account associated
+* with a bank
+* List&lt;javaATM.Card&gt; cards ==&gt; a list of credit cards associated with the account
+* List&lt;Transaction&gt; transactions ==&gt; a list of transactions associated with the account
+*/
+public class Account {
+<span class="fc" id="L13">	private double balance = 0;</span>
+	private int accountNumber;
+	private ArrayList&lt;Card&gt; cards;
+	private ArrayList&lt;Transaction&gt; transactions;
+	
+<span class="fc" id="L18">	public Account() {</span>
+<span class="fc" id="L19">		int accNum = (int) Math.round(Math.random()*100000000); // 8 digit integer that identifies the unique account</span>
+<span class="pc bpc" id="L20" title="2 of 4 branches missed.">		while(ATM.getAccount(accNum) != null || accNum &lt; 10000000) {</span>
+<span class="nc" id="L21">			accNum = (int) Math.round(Math.random()*100000000);</span>
+		}
+<span class="fc" id="L23">		this.accountNumber = accNum;</span>
+<span class="fc" id="L24">		transactions = new ArrayList&lt;Transaction&gt;();</span>
+<span class="fc" id="L25">		cards = new ArrayList&lt;Card&gt;();</span>
+<span class="fc" id="L26">	}</span>
+
+<span class="fc" id="L28">	public Account(int accountNumber, double balance) {</span>
+<span class="fc" id="L29">		this.accountNumber = accountNumber;</span>
+<span class="fc" id="L30">		this.balance = balance;</span>
+<span class="fc" id="L31">		this.transactions =  new ArrayList&lt;Transaction&gt;();</span>
+<span class="fc" id="L32">		this.cards = new ArrayList&lt;Card&gt;();</span>
+<span class="fc" id="L33">	}</span>
+
+<span class="fc" id="L35">	public void addMoney(int amt) { this.balance += amt; }</span>
+
+<span class="fc" id="L37">	public double getBalance() { return this.balance; }</span>
+
+	public void deductMoney(double amt) {
+<span class="fc" id="L40">		this.balance -= amt;</span>
+<span class="fc" id="L41">	}</span>
+
+	public void addCard(Card newCard) {
+<span class="fc" id="L44">		cards.add(newCard);</span>
+<span class="fc" id="L45">	}</span>
+
+<span class="fc" id="L47">	public ArrayList&lt;Card&gt; getCards(){ return cards;}</span>
+
+<span class="fc" id="L49">	public void addTransaction(Transaction invoice){ this.transactions.add(invoice); }</span>
+
+<span class="fc" id="L51">	public int getAccountNumber(){ return this.accountNumber;}</span>
+	
+	public ArrayList&lt;Transaction&gt; getInvoices() {
+<span class="fc" id="L54">		return this.transactions;</span>
+	}
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

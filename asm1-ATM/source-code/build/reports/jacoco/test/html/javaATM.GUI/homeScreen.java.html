@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>homeScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">source-code</a> &gt; <a href="index.source.html" class="el_package">javaATM.GUI</a> &gt; <span class="el_source">homeScreen.java</span></div><h1>homeScreen.java</h1><pre class="source lang-java linenums">package javaATM.GUI;
+
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
+
+import java.time.LocalDate;
+
+import java.util.List;
+import java.sql.Date;
+
+import javaATM.Card;
+import javafx.event.ActionEvent;
+
+import javaATM.GUILogic.guiLogic;
+
+public class homeScreen {
+    Pane pane;
+<span class="nc" id="L23">    int attempts = 3;</span>
+    //boolean verified = true;
+    //boolean verified = false;
+<span class="nc" id="L26">    boolean invalid = false;</span>
+<span class="nc" id="L27">    boolean dateIsNotValid = false;</span>
+    List&lt;Card&gt; cardsList;
+    Card validCard;
+
+<span class="nc" id="L31">    public homeScreen(List&lt;Card&gt; cardsList) {</span>
+<span class="nc" id="L32">        pane = new Pane();</span>
+<span class="nc" id="L33">        createNodes();</span>
+<span class="nc" id="L34">        this.cardsList = cardsList;</span>
+<span class="nc" id="L35">    }</span>
+
+    public void createNodes() {
+<span class="nc" id="L38">        Text welcomeText = nodeCreator.createText(&quot;Welcome to the ATM&quot;);</span>
+<span class="nc" id="L39">        welcomeText.setStyle(&quot;-fx-font-size: 20&quot;);</span>
+<span class="nc" id="L40">        welcomeText.setLayoutX(300);</span>
+<span class="nc" id="L41">        welcomeText.setLayoutY(100);</span>
+
+<span class="nc" id="L43">        Text promptText = nodeCreator.createText(&quot;Enter your card number below:&quot;);</span>
+<span class="nc" id="L44">        promptText.setStyle(&quot;-fx-font-size: 20&quot;);</span>
+<span class="nc" id="L45">        promptText.setLayoutX(270);</span>
+<span class="nc" id="L46">        promptText.setLayoutY(150);</span>
+
+<span class="nc" id="L48">        TextField cardText = nodeCreator.createTextField(&quot;Enter card number...&quot;);</span>
+<span class="nc" id="L49">        cardText.setLayoutX(260);</span>
+<span class="nc" id="L50">        cardText.setLayoutY(200);</span>
+<span class="nc" id="L51">        cardText.setPrefSize(300, 30);</span>
+
+<span class="nc" id="L53">        Text pinPromptText = nodeCreator.createText(&quot;Enter your pin number below:&quot;);</span>
+<span class="nc" id="L54">        pinPromptText.setStyle(&quot;-fx-font-size: 20&quot;);</span>
+<span class="nc" id="L55">        pinPromptText.setLayoutX(270);</span>
+<span class="nc" id="L56">        pinPromptText.setLayoutY(300);</span>
+
+<span class="nc" id="L58">        TextField pinText = nodeCreator.createTextField(&quot;Enter pin number...&quot;);</span>
+<span class="nc" id="L59">        pinText.setLayoutX(260);</span>
+<span class="nc" id="L60">        pinText.setLayoutY(350);</span>
+<span class="nc" id="L61">        pinText.setPrefSize(300, 30);</span>
+
+<span class="nc" id="L63">        Button doneButton = nodeCreator.createButton(&quot;Done&quot;);</span>
+<span class="nc" id="L64">        doneButton.setLayoutX(350);</span>
+<span class="nc" id="L65">        doneButton.setLayoutY(520);</span>
+<span class="nc" id="L66">        doneButton.setPrefSize(100, 30);</span>
+<span class="nc" id="L67">        doneButton.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent event) {
+<span class="nc" id="L70">                boolean cardIsValid = guiLogic.checkValid(Integer.parseInt(cardText.getText()), Integer.parseInt(pinText.getText()), cardsList);</span>
+<span class="nc" id="L71">                dateIsNotValid = guiLogic.isDateValid(guiLogic.validCard.getStartDate(), guiLogic.validCard.getExpiryDate());</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">                if (cardIsValid) {</span>
+<span class="nc" id="L73">                    doneButton.getScene().setRoot(new optionScreen(validCard).getOptionScreen());</span>
+                }
+<span class="nc bnc" id="L75" title="All 2 branches missed.">                else if(dateIsNotValid) {</span>
+<span class="nc" id="L76">                    doneButton.getScene().setRoot(new dateInvalidScreen().getApologyScreen());</span>
+                }
+                else {
+<span class="nc" id="L79">                    System.out.println(attempts);</span>
+<span class="nc bnc" id="L80" title="All 4 branches missed.">                    if (invalid == true || attempts == 1) {</span>
+<span class="nc" id="L81">                        doneButton.getScene().setRoot(new apologyScreen().getApologyScreen());</span>
+                    }
+                    else {
+                        //testing only
+<span class="nc" id="L85">                        attempts--;</span>
+<span class="nc" id="L86">                        pane.getChildren().retainAll(welcomeText, promptText, cardText, pinPromptText, pinText, doneButton);</span>
+<span class="nc" id="L87">                        pane.getChildren().add(makeErrorText());</span>
+                        //doneButton.getScene().setRoot(pane);
+                    }
+                }
+<span class="nc" id="L91">            }</span>
+        });
+
+<span class="nc" id="L94">        Button adminScreen = nodeCreator.createButton(&quot;Admin Login Screen&quot;);</span>
+<span class="nc" id="L95">        adminScreen.setLayoutX(300);</span>
+<span class="nc" id="L96">        adminScreen.setLayoutY(700);</span>
+<span class="nc" id="L97">        adminScreen.setPrefSize(200, 30);</span>
+<span class="nc" id="L98">        adminScreen.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent event) {
+<span class="nc" id="L101">                adminScreen.getScene().setRoot(new adminLoginScreen(cardsList).getAdminLoginScreen());</span>
+<span class="nc" id="L102">            }</span>
+        });
+<span class="nc" id="L104">        pane.getChildren().addAll(welcomeText, promptText, cardText, pinPromptText, pinText, doneButton, adminScreen);</span>
+<span class="nc" id="L105">    }</span>
+
+    public Text makeErrorText() {
+<span class="nc" id="L108">        Text errorText = nodeCreator.createText(&quot;Your card details are incorrect. You have &quot;+attempts+&quot; attempts remaining.&quot;);</span>
+<span class="nc" id="L109">        errorText.setStyle(&quot;-fx-font-size: 12&quot;);</span>
+<span class="nc" id="L110">        errorText.setFill(Paint.valueOf(&quot;RED&quot;));</span>
+<span class="nc" id="L111">        errorText.setLayoutX(250);</span>
+<span class="nc" id="L112">        errorText.setLayoutY(700);</span>
+<span class="nc" id="L113">        return errorText;</span>
+    }
+
+    public Pane getHomeScreen() {
+<span class="nc" id="L117">        return pane;</span>
+    }
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

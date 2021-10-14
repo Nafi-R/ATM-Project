@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="javaATM.test.AccountTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2021-09-21T09:08:08" hostname="DESKTOP-G5C44PT" time="0.035">
+  <properties/>
+  <testcase name="testAddCard()" classname="javaATM.test.AccountTest" time="0.026"/>
+  <testcase name="testGetAcctNum()" classname="javaATM.test.AccountTest" time="0.001"/>
+  <testcase name="testGetInvoicesEmpty()" classname="javaATM.test.AccountTest" time="0.001"/>
+  <testcase name="testAddMoney()" classname="javaATM.test.AccountTest" time="0.002"/>
+  <testcase name="testGetCard()" classname="javaATM.test.AccountTest" time="0.001"/>
+  <testcase name="testDeductMoney()" classname="javaATM.test.AccountTest" time="0.0"/>
+  <testcase name="testGetCardEmpty()" classname="javaATM.test.AccountTest" time="0.001"/>
+  <testcase name="testAddTransaction()" classname="javaATM.test.AccountTest" time="0.001"/>
+  <testcase name="testDefaultConstructor()" classname="javaATM.test.AccountTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

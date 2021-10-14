@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>balanceScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">source-code</a> &gt; <a href="index.source.html" class="el_package">javaATM.GUI</a> &gt; <span class="el_source">balanceScreen.java</span></div><h1>balanceScreen.java</h1><pre class="source lang-java linenums">package javaATM.GUI;
+
+import javaATM.Card;
+import javaATM.IO;
+import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
+
+public class balanceScreen {
+    Pane pane;
+    double balance;
+    Card card;
+
+<span class="nc" id="L17">    public balanceScreen(Card card) {</span>
+<span class="nc" id="L18">        pane = new Pane();</span>
+<span class="nc" id="L19">        balance = card.getBalance();</span>
+<span class="nc" id="L20">        createNodes();</span>
+<span class="nc" id="L21">        this.card = card;</span>
+<span class="nc" id="L22">    }</span>
+
+    public void createNodes() {
+<span class="nc" id="L25">        Text headerText = nodeCreator.createText(&quot;Available funds&quot;);</span>
+<span class="nc" id="L26">        headerText.setStyle(&quot;-fx-font-size:20&quot;);</span>
+<span class="nc" id="L27">        headerText.setLayoutX(350);</span>
+<span class="nc" id="L28">        headerText.setLayoutY(200);</span>
+
+<span class="nc" id="L30">        Text promptText = nodeCreator.createText(&quot;Please see your available funds below. Go back to deposit or withdraw funds.&quot;);</span>
+<span class="nc" id="L31">        promptText.setStyle(&quot;-fx-font-size:16&quot;);</span>
+<span class="nc" id="L32">        promptText.setLayoutX(150);</span>
+<span class="nc" id="L33">        promptText.setLayoutY(250);</span>
+
+<span class="nc" id="L35">        Text balanceText = nodeCreator.createText(&quot;Balance: $&quot;+Double.toString(balance));</span>
+<span class="nc" id="L36">        balanceText.setStyle(&quot;-fx-font-size:20&quot;);</span>
+<span class="nc" id="L37">        balanceText.setLayoutX(320);</span>
+<span class="nc" id="L38">        balanceText.setLayoutY(300);</span>
+
+<span class="nc" id="L40">        Button backButton = nodeCreator.createButton(&quot;Go back&quot;);</span>
+<span class="nc" id="L41">        backButton.setPrefSize(100, 30);</span>
+<span class="nc" id="L42">        backButton.setLayoutX(360);</span>
+<span class="nc" id="L43">        backButton.setLayoutY(400);</span>
+<span class="nc" id="L44">        backButton.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent event) {
+<span class="nc" id="L47">                backButton.getScene().setRoot(new optionScreen(card).getOptionScreen());</span>
+<span class="nc" id="L48">            }</span>
+        });
+
+        //exit button
+<span class="nc" id="L52">        Button exitButton = nodeCreator.createButton(&quot;Exit ATM&quot;);</span>
+<span class="nc" id="L53">        exitButton.setLayoutX(340);</span>
+<span class="nc" id="L54">        exitButton.setLayoutY(600);</span>
+<span class="nc" id="L55">        exitButton.setPrefWidth(150);</span>
+<span class="nc" id="L56">        exitButton.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent event) {
+<span class="nc" id="L59">                Stage stage = (Stage) exitButton.getScene().getWindow();</span>
+<span class="nc" id="L60">                new IO().save();</span>
+<span class="nc" id="L61">                stage.close();</span>
+<span class="nc" id="L62">            }</span>
+        });
+
+<span class="nc" id="L65">        pane.getChildren().addAll(headerText, promptText, balanceText, backButton, exitButton);</span>
+<span class="nc" id="L66">    }</span>
+
+    public Pane getBalanceScreen() {
+<span class="nc" id="L69">        return pane;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

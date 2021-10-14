@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>guiLogic.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">source-code</a> &gt; <a href="index.source.html" class="el_package">javaATM.GUILogic</a> &gt; <span class="el_source">guiLogic.java</span></div><h1>guiLogic.java</h1><pre class="source lang-java linenums">package javaATM.GUILogic;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import javaATM.Card;
+
+<span class="nc" id="L8">public class guiLogic {</span>
+    public static Card validCard;
+    
+    public static boolean checkValid(int cardNo, int pinNo, List&lt;Card&gt; cardsList) {
+        //check if card is valid
+        //if not valid, decrement attempts
+<span class="fc" id="L14">        boolean cardisValid = false;</span>
+
+<span class="fc bfc" id="L16" title="All 2 branches covered.">        for (int i=0; i&lt;cardsList.size(); i++) {</span>
+<span class="fc" id="L17">            Card card = cardsList.get(i);</span>
+<span class="fc" id="L18">            System.out.println(card.getCardNumber() + &quot; &quot; + card.getPin());</span>
+<span class="pc bpc" id="L19" title="1 of 4 branches missed.">            if (cardNo == card.getCardNumber() &amp;&amp; pinNo == card.getPin()) {</span>
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">                if (card.getStatus().equals(&quot;Valid&quot;)) {</span>
+<span class="fc" id="L21">                    cardisValid = true;</span>
+<span class="fc" id="L22">                    validCard = card;</span>
+<span class="fc" id="L23">                    break;</span>
+                }
+            }
+        }
+<span class="fc" id="L27">        return cardisValid;</span>
+    }
+
+    public static boolean isDateValid(LocalDate issue, LocalDate expiry) {
+<span class="fc" id="L31">        int compareValIssue = issue.compareTo(LocalDate.now());</span>
+<span class="fc" id="L32">        int compareValExpiry = expiry.compareTo(LocalDate.now());</span>
+<span class="fc" id="L33">        System.out.println(issue+ &quot; &quot;  + LocalDate.now());</span>
+<span class="pc bpc" id="L34" title="1 of 4 branches missed.">        if(compareValIssue &lt; 0 &amp;&amp; compareValExpiry &gt; 0) {</span>
+<span class="fc" id="L35">            return true;</span>
+        }
+<span class="fc" id="L37">        return false;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>transactionsScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">source-code</a> &gt; <a href="index.source.html" class="el_package">javaATM.GUI</a> &gt; <span class="el_source">transactionsScreen.java</span></div><h1>transactionsScreen.java</h1><pre class="source lang-java linenums">package javaATM.GUI;
+
+import javaATM.ATM;
+import javaATM.Account;
+import javaATM.Transaction;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javaATM.IO;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class transactionsScreen {
+<span class="nc" id="L25">    static Pane pane = new Pane();</span>
+<span class="nc" id="L26">    static TableView&lt;Transaction&gt; table = new TableView&lt;&gt;();</span>
+    //static Stage stage = new Stage();
+    //static Scene scene = new Scene(pane, 800, 475);
+
+<span class="nc" id="L30">    public transactionsScreen() {</span>
+<span class="nc" id="L31">        createNodes();</span>
+<span class="nc" id="L32">    }</span>
+
+    //public static void show()
+    //{
+    //    createNodes();
+    //    stage.setTitle(&quot;ATM Transactions&quot;);
+    //    stage.setScene(scene);
+    //    stage.setResizable(false);
+    //    stage.show();
+    //}
+
+    private static  void createNodes(){
+<span class="nc" id="L44">        table = new TableView&lt;&gt;();</span>
+<span class="nc" id="L45">        table.setMinWidth(800);</span>
+<span class="nc" id="L46">        List&lt;TableColumn&lt;Transaction, ?&gt;&gt; columns = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L47">        TableColumn&lt;Transaction, String&gt; accNumColumn = new TableColumn&lt;&gt;(&quot;Account Number&quot;);</span>
+<span class="nc" id="L48">        accNumColumn.setCellValueFactory(val -&gt; new SimpleStringProperty(&quot;&quot; +val.getValue().getAccount().getAccountNumber()));</span>
+<span class="nc" id="L49">        accNumColumn.setMinWidth(200);</span>
+<span class="nc" id="L50">        columns.add(accNumColumn);</span>
+
+
+<span class="nc" id="L53">        TableColumn&lt;Transaction, Integer&gt; transactNumColumn = new TableColumn&lt;&gt;(&quot;Transaction Number&quot;);</span>
+<span class="nc" id="L54">        transactNumColumn.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;transactNumber&quot;));</span>
+<span class="nc" id="L55">        transactNumColumn.setMinWidth(200);</span>
+<span class="nc" id="L56">        columns.add(transactNumColumn);</span>
+
+<span class="nc" id="L58">        TableColumn&lt;Transaction, Double&gt; transactAmountColumn = new TableColumn&lt;&gt;(&quot;Transaction Amount&quot;);</span>
+<span class="nc" id="L59">        transactAmountColumn.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;transactAmt&quot;));</span>
+<span class="nc" id="L60">        transactAmountColumn.setMinWidth(200);</span>
+<span class="nc" id="L61">        columns.add(transactAmountColumn);</span>
+
+<span class="nc" id="L63">        TableColumn&lt;Transaction, Integer&gt; transactTypeColumn = new TableColumn&lt;&gt;(&quot;Transaction Type&quot;);</span>
+<span class="nc" id="L64">        transactTypeColumn.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;transactAmt&quot;));</span>
+<span class="nc" id="L65">        transactTypeColumn.setMinWidth(200);</span>
+<span class="nc" id="L66">        columns.add(transactTypeColumn);</span>
+
+<span class="nc" id="L68">        table.setItems(getTransactions());</span>
+<span class="nc" id="L69">        table.getColumns().addAll(columns);</span>
+
+<span class="nc" id="L71">        Button goBack = nodeCreator.createButton(&quot;Go Back&quot;);</span>
+<span class="nc" id="L72">        goBack.setLayoutX(250);</span>
+<span class="nc" id="L73">        goBack.setLayoutY(425);</span>
+<span class="nc" id="L74">        goBack.setOnMouseClicked(event -&gt; {</span>
+<span class="nc" id="L75">            goBack.getScene().setRoot(new adminScreen().getAdminScreen());</span>
+<span class="nc" id="L76">        });</span>
+
+<span class="nc" id="L78">        Button closeButton = nodeCreator.createButton(&quot;Close&quot;);</span>
+<span class="nc" id="L79">        closeButton.setLayoutX(380);</span>
+<span class="nc" id="L80">        closeButton.setLayoutY(425);</span>
+<span class="nc" id="L81">        closeButton.setOnAction(new EventHandler&lt;ActionEvent&gt;() {</span>
+            @Override
+            public void handle(ActionEvent event) {
+<span class="nc" id="L84">                Stage stage = (Stage) closeButton.getScene().getWindow();</span>
+<span class="nc" id="L85">                new IO().save();</span>
+<span class="nc" id="L86">                stage.close();</span>
+<span class="nc" id="L87">            }</span>
+        });
+
+<span class="nc" id="L90">        pane.getChildren().addAll(goBack, table, closeButton);</span>
+<span class="nc" id="L91">    }</span>
+
+    private static ObservableList&lt;Transaction&gt; getTransactions(){
+<span class="nc" id="L94">        ObservableList&lt;Transaction&gt; output = FXCollections.observableArrayList();</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">        for(Account a : ATM.getAccounts())</span>
+<span class="nc" id="L96">            output.addAll(a.getInvoices());</span>
+<span class="nc" id="L97">        return output;</span>
+    }
+
+    public Pane getTransactionsScreen() {
+<span class="nc" id="L101">        return pane;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

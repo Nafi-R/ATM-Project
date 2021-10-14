@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>transactionNoChargeScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">source-code</a> &gt; <a href="index.source.html" class="el_package">javaATM.GUI</a> &gt; <span class="el_source">transactionNoChargeScreen.java</span></div><h1>transactionNoChargeScreen.java</h1><pre class="source lang-java linenums">package javaATM.GUI;
+
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+
+
+public class transactionNoChargeScreen {
+	Pane pane;
+	
+<span class="nc" id="L12">	public transactionNoChargeScreen() {</span>
+<span class="nc" id="L13">		pane = new Pane();</span>
+<span class="nc" id="L14">		createNodes();</span>
+<span class="nc" id="L15">	}</span>
+	
+	public void createNodes() {
+
+<span class="nc" id="L19">		Text ifundstxt = nodeCreator.createText(&quot;Transaction Cancelled.&quot;);</span>
+
+<span class="nc" id="L21">		Text ifundstxt3 = nodeCreator.createText(&quot;You have not been charged.&quot;);</span>
+		
+		// styling ifundstxt
+<span class="nc" id="L24">		ifundstxt.setStyle(&quot;-fx-font-size: 20&quot;);</span>
+<span class="nc" id="L25">		ifundstxt.setLayoutX(275);</span>
+<span class="nc" id="L26">		ifundstxt.setLayoutY(250);</span>
+		
+		// styling ifundstxt3
+<span class="nc" id="L29">		ifundstxt3.setStyle(&quot;-fx-font-size: 20&quot;);</span>
+<span class="nc" id="L30">		ifundstxt3.setLayoutX(250);</span>
+<span class="nc" id="L31">		ifundstxt3.setLayoutY(350);</span>
+		
+<span class="nc" id="L33">		pane.getChildren().addAll(ifundstxt,ifundstxt3);</span>
+<span class="nc" id="L34">	}</span>
+	
+	public Pane getTransactionNoChargeScreen() {
+<span class="nc" id="L37">		return this.pane;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

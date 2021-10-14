@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Card.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">source-code</a> &gt; <a href="index.source.html" class="el_package">javaATM</a> &gt; <span class="el_source">Card.java</span></div><h1>Card.java</h1><pre class="source lang-java linenums">package javaATM;
+
+import java.time.LocalDate;
+
+public class Card {
+
+	Account associatedAccount;
+	int cardNumber;
+	private int pinNumber;
+	String cardStatus;
+	LocalDate startDate;
+	LocalDate expiryDate;
+	
+
+	/**
+	* javaATM.Card constructor
+	* javaATM.Card(int cardNumber, int initialBalance, int pinNumber, javaATM.Account associatedAccount)
+	*/
+<span class="nc" id="L19">	public Card(int pin, Account acct) {</span>
+<span class="nc" id="L20">		int cardNum = (int) Math.round(Math.random()*100000000); // 8 digit integer that identifies the unique card</span>
+<span class="nc bnc" id="L21" title="All 4 branches missed.">		while(ATM.getCard(cardNum) != null || cardNum &lt; 10000000) {</span>
+<span class="nc" id="L22">			cardNum = (int) Math.round(Math.random()*100000000);</span>
+		}
+<span class="nc" id="L24">		this.cardNumber = cardNum;</span>
+<span class="nc" id="L25">		this.associatedAccount = acct;</span>
+<span class="nc" id="L26">		this.pinNumber = pin;</span>
+<span class="nc" id="L27">		this.startDate = LocalDate.now(); // set as the current day of when the new card is created</span>
+<span class="nc" id="L28">		this.expiryDate = LocalDate.of(startDate.getYear() + 3, startDate.getMonthValue(), startDate.getDayOfMonth()); // expiry date will be 3 years from when the card is opened</span>
+<span class="nc" id="L29">		this.cardStatus = &quot;Valid&quot;;</span>
+<span class="nc" id="L30">	}</span>
+
+<span class="fc" id="L32">	public Card(int cardNumber, int pinNumber, Account acct) {</span>
+<span class="fc" id="L33">		this.associatedAccount = acct;</span>
+<span class="fc" id="L34">		this.cardNumber = cardNumber;</span>
+<span class="fc" id="L35">		this.pinNumber = pinNumber;</span>
+<span class="fc" id="L36">		this.startDate = LocalDate.now(); // set as the current day of when the new card is created</span>
+<span class="fc" id="L37">		this.expiryDate = LocalDate.of(startDate.getYear() + 3, startDate.getMonthValue(), startDate.getDayOfMonth()); // expiry date will be 3 years from when the card is opened</span>
+<span class="fc" id="L38">		this.cardStatus = &quot;Valid&quot;;</span>
+<span class="fc" id="L39">	}</span>
+
+<span class="nc" id="L41">	public Card(int cardNumber, int pinNumber, Account acct, LocalDate startDate, LocalDate expiryDate, String status) {</span>
+<span class="nc" id="L42">		this.associatedAccount = acct;</span>
+<span class="nc" id="L43">		this.cardNumber = cardNumber;</span>
+<span class="nc" id="L44">		this.pinNumber = pinNumber;</span>
+<span class="nc" id="L45">		this.startDate = startDate;</span>
+<span class="nc" id="L46">		this.expiryDate = expiryDate;</span>
+<span class="nc" id="L47">		this.cardStatus = status;</span>
+<span class="nc" id="L48">	}</span>
+
+
+
+	public double getBalance() {
+<span class="nc" id="L53">		return this.associatedAccount.getBalance();</span>
+	}
+
+<span class="nc" id="L56">	public void addMoney(int amt) { this.associatedAccount.addMoney(amt); }</span>
+
+<span class="nc" id="L58">	public void deductMoney(double amt) { this.associatedAccount.deductMoney(amt); }</span>
+
+	public int getCardNumber() {
+<span class="fc" id="L61">		return cardNumber;</span>
+	}
+
+	public int getPin() {
+<span class="fc" id="L65">		return pinNumber;</span>
+	}
+
+	public void setPin(int newPin) {
+<span class="nc" id="L69">		this.pinNumber = newPin;</span>
+<span class="nc" id="L70">	}</span>
+	
+	public void setCardNumber(int number) {
+<span class="nc" id="L73">		this.cardNumber = number;</span>
+<span class="nc" id="L74">	}</span>
+	
+	public void changeAccount(Account newAcct) {
+<span class="nc" id="L77">		this.associatedAccount = newAcct;</span>
+<span class="nc" id="L78">	}</span>
+
+<span class="nc" id="L80">	public void setStatus(String status) { this.cardStatus = status; }</span>
+
+<span class="nc" id="L82">	public Account getAccount() { return this.associatedAccount; }</span>
+
+<span class="nc" id="L84">	public LocalDate getStartDate() { return this.startDate; }</span>
+
+	public LocalDate getExpiryDate() {
+<span class="nc" id="L87">		return this.expiryDate;</span>
+	}
+
+<span class="fc" id="L90">	public String getStatus() {	return this.cardStatus;	}</span>
+
+	public void updateStatus(){
+<span class="nc bnc" id="L93" title="All 2 branches missed.">		if (this.cardStatus.equals(&quot;Valid&quot;)) {</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">			if (LocalDate.now().isBefore(startDate)){this.cardStatus = &quot;Not activated yet&quot;;	}</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">			else if(LocalDate.now().isAfter(expiryDate)){this.cardStatus = &quot;Expired&quot;; }</span>
+		}
+<span class="nc bnc" id="L97" title="All 4 branches missed.">		else if(this.cardStatus.equals(&quot;Not activated yet&quot;) || this.cardStatus.equals(&quot;Expired&quot;)){</span>
+<span class="nc bnc" id="L98" title="All 4 branches missed.">			if (LocalDate.now().isAfter(startDate) &amp;&amp; LocalDate.now().isBefore(expiryDate)) {</span>
+<span class="nc" id="L99">				this.cardStatus = &quot;Valid&quot;;</span>
+			}
+		}
+<span class="nc" id="L102">	}</span>
+}
+
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
