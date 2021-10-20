@@ -8,7 +8,7 @@ This program simulates the functionalities of an ATM software application.
 
 To download and run the program
 - Install Java 11.0.0 or later
-- Download the ATM.jar [here](https://github.sydney.edu.au/SOFT2412-2021S2/w14_c3_group4/raw/master/ATM.jar)
+- Download the ATM.jar [here](https://github.com/Nafi-R/ATM-Project/raw/master/ATM.jar)
 - Place in suitable folder
 - Open to run!
 
